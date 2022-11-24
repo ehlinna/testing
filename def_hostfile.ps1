@@ -1,3 +1,4 @@
+#region forsøk1
 <#
 $HostFile = 'C:\Windows\System32\drivers\etc\hosts'
 $File = Get-Content $HostFile
@@ -19,8 +20,13 @@ if ($valg -eq '2'){
 
 }
 #>
+#endregion functions
 
-function new_hostEntry{
+#region forsøk2
+$HostFile = 'C:\Windows\System32\drivers\etc\hosts'
+$File = Get-Content $HostFile
+
+function new_hostEntry($HostFile, $File){
     $HostFile = 'C:\Windows\System32\drivers\etc\hosts'
     $File = Get-Content $HostFile
     $ip=Read-host "IP for nye host entry: "
@@ -33,22 +39,39 @@ function new_hostEntry{
             Add-Content -Path $HostFile -Value "$ip $dns"
         }
     }
-new_hostEntry
 
-function delete_Entry{
-    $HostFile = 'C:\Windows\System32\drivers\etc\hosts'
-    $File = Get-Content $HostFile
+function delete_Entry {
     $delete=Read-host "IP/DNS wanted deleted(eks. 10.10.10.10 test.local): "
-    Clear-Content -Path $HostFile -Filter "$delete"  
+    Clear-Content -Path $HostFile -include "$delete"  
     Write-Host "deleting host entry.."
-    }
-delete_Entry
+}
 
-function edit_Entry{
+function edit_Entry ($HostFile, $File){
     $HostFile = 'C:\Windows\System32\drivers\etc\hosts'
     $change_From=Read-host "IP/DNS wanted changed from(eks. 10.10.10.10 test.local): "
     $change_To=Read-host "IP/DNS wanted changed to(eks. 10.10.10.10 test.local): "
-    Set-Content -Path $HostFile -Filter "$change_From" -Value $change_To  
-    Write-Host "Changing host entry.."
+    try{
+        Set-Content -Path $HostFile -include "$change_From" -Value $change_To
+    }
+    catch{"Error"}  
+    if(!error){
+        Write-Host "Changing host entry.."
+    }
 }
+
+#endregion functions
+
+# -- Main --
+#for forsøk2
+new_hostEntry
+delete_Entry
 edit_Entry
+
+
+
+foreach($line in Get-Content .\file.txt) {
+    if($line -match $regex){
+        # Work here
+    }
+}
+#^--Må bruke foreach for å gå gjennom linene i hosts fila.
