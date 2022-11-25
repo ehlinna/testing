@@ -27,8 +27,6 @@ $HostFile = 'C:\Windows\System32\drivers\etc\hosts'
 $File = Get-Content $HostFile
 
 function new_hostEntry($HostFile, $File){
-    $HostFile = 'C:\Windows\System32\drivers\etc\hosts'
-    $File = Get-Content $HostFile
     $ip=Read-host "IP for nye host entry: "
     $DNS=Read-host "DNS for nye host entry: "
         if ($File -contains $ip -or $File -contains $DNS) {
@@ -59,19 +57,45 @@ function edit_Entry ($HostFile, $File){
     }
 }
 
-#endregion functions
 
 # -- Main --
 #for forsøk2
 new_hostEntry
 delete_Entry
 edit_Entry
+#endregion functions
 
+function print_Entry ($HostFile, $File){
+    $regex = Read-host "Host entry "
 
-
-foreach($line in Get-Content .\file.txt) {
-    if($line -match $regex){
-        # Work here
+    foreach($line in [System.IO.File]::ReadLines("C:\Windows\System32\drivers\etc\hosts")){
+        Select-String -path "C:\Windows\System32\drivers\etc\hosts" -pattern $regex -SimpleMatch
     }
 }
-#^--Må bruke foreach for å gå gjennom linene i hosts fila.
+
+
+function add_Entry ($HostFile, $File){
+    $ip = Read-host "IP of host entry "
+    $DNS = Read-host "DNS of host entry "
+    foreach($line in [System.IO.File]::ReadLines("C:\Windows\System32\drivers\etc\hosts")){
+    if($line -contains $ip -or $line -contains $DNS){
+        Write-Output "Already added"
+        Stop-Process
+    }
+    else{
+        try{
+            Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" -Value "$ip + $DNS"
+            Write-host "Adding Host File Entry"
+        }catch{
+            Write-host "Error"
+        }
+   }
+
+}
+}
+
+# -- Main --
+#for forsøk3
+print_Entry
+add_Entry
+    
