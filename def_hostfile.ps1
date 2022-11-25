@@ -21,7 +21,7 @@ if ($valg -eq '2'){
 }
 #>
 #endregion functions
-
+<#
 #region forsøk2
 $HostFile = 'C:\Windows\System32\drivers\etc\hosts'
 $File = Get-Content $HostFile
@@ -64,6 +64,7 @@ new_hostEntry
 delete_Entry
 edit_Entry
 #endregion functions
+#>
 
 function print_Entry ($HostFile, $File){
     $regex = Read-host "Host entry "
