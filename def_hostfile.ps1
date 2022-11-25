@@ -70,7 +70,7 @@ function print_Entry ($HostFile, $File){
     $regex = Read-host "Host entry "
 
     foreach($line in [System.IO.File]::ReadLines("C:\Windows\System32\drivers\etc\hosts")){
-        Select-String -path "C:\Windows\System32\drivers\etc\hosts" -pattern $regex -SimpleMatch
+        Write-host -path "C:\Windows\System32\drivers\etc\hosts" -pattern $regex -SimpleMatch
     }
 }
 
